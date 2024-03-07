@@ -6,7 +6,7 @@
     <title>Evaluation Dashboard</title>
     {% load static %}
 
-    <link rel="stylesheet" href="{% static '/dashboard/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
     
 </head>
 
@@ -18,18 +18,16 @@
             <a href="">Graphs</a>
             <a href="">Statistics</a>
         </div>  
-            
-            <a href="{% url 'dashboard:load_file' %}">Load file</a>
-            
+            <button class="loadFileButton">Upload file</button></li>
     </div>
 
-    
-    <div class="main">
-        <div class="sidebar"> </div>
-        
-        <div class="verticalLine"></div>
-        <div class="mainbar">
+    <div>
+        <div class="sidebar">
 
+        </div>
+        <div class="verticaLine"></div>
+        <div class="mainbar">
+            
         </div>
     </div>
     

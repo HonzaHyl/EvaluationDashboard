@@ -7,5 +7,7 @@ from . import views
 app_name = "dashboard"
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path('', views.index, name='index'),
+    path('genefamilies/', views.genefamilies, name='genefamilies'),
+    path('load_file/', views.load_file, name='load_file'),
 ]
