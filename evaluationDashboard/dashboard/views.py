@@ -3,11 +3,21 @@ from .forms import UploadTableForm
 
 from django.urls import reverse
 
+import pandas as pd
+
 
 # Create your views here.
 
 def index(request):
-    return render(request,'dashboard/index.html')
+    filePath = "media/documents/merged_genefamilies_tables.tsv"
+    data = []
+
+    df = pd.read_csv(filePath, nrows=30, sep="\t", header=None)
+
+    data = df.values.tolist()
+    context = {"data":data}
+
+    return render(request,'dashboard/index.html', context)
 
 def load_file(request):
     if request.method == 'POST':

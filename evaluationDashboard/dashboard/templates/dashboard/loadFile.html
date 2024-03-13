@@ -6,14 +6,18 @@
     <title>Load file</title>
     {% load static %}
 
-    <link rel="stylesheet" href="{% static '/dashboard/style.css' %}">
+    <link rel="stylesheet" href="{% static '/dashboard/loadFile.css' %}">
 </head>
 <body>
-    <form method='post' enctype="multipart/form-data">
+    <div class="formContainer">
+    <form method='post' enctype="multipart/form-data" class="form">
         {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Upload file" >
+        {{form.as_div}}
+        <input type="submit" value="Upload file" class="sendForm">
     </form>
-    
+    <a href="javascript:history.go(-1)">Back to main page</a>
+    </div>  
+
+    <script src="{% static 'dashboard/loadFile.js' %}"></script>
 </body>
 </html>

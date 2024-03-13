@@ -19,7 +19,7 @@
             <a href="">Statistics</a>
         </div>  
             
-            <a href="{% url 'dashboard:load_file' %}">Load file</a>
+            <a href="{% url 'dashboard:load_file' %}" class="LoadFileButton">Load file</a>
             
     </div>
 
@@ -29,6 +29,16 @@
         
         <div class="verticalLine"></div>
         <div class="mainbar">
+
+            <table>
+                {% for row in data %}
+                <tr>
+                    {% for column in row %}
+                    <td>{{ column }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
 
         </div>
     </div>

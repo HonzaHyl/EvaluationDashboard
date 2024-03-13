@@ -6,6 +6,7 @@
     margin: 0;
 }
 
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -36,6 +37,9 @@
     border-radius: 3px;
 
     cursor: pointer;
+
+    text-decoration: none;
+    color: black;
 }
 
 .LoadFileButton:hover, .LoadFileButton:focus {
@@ -46,12 +50,14 @@
 
 .main {
     display: flex;
+    width: 100%;
+    height: 100%;
 
 }
 /** ------------------Sidebar------------------ **/
 .sidebar {
-    width: 25rem;
-    height: 50rem;
+    width: 25%;
+    height: 100%;
     background-color: aqua;
     margin: 10px 0;
 }
@@ -59,7 +65,7 @@
 /** ------------------Vertical line------------------ **/
 
 .verticalLine {
-    height: 50rem;
+    height: 100%;
     width: 1px;
     background-color: black;
     margin: 10px 0px;
@@ -69,8 +75,10 @@
 
 .mainbar {
     
-    width: 70rem;
-    height: 50rem;
+    width: 75%;
+    
     margin: 10px 0;
     background-color: aquamarine;
+    overflow: scroll;
 }
+

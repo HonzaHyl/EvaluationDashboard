@@ -1,7 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Yellowtail&display=swap');
+
+
 body {
+    margin: 0;
+    font-family: "Roboto Slab", sans-serif;
+}
+
+.formContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    min-height: 100px;
+    height: 100vh;
+    flex-direction: column;
+    gap: 50px;
+
+}
+
+.formContainer a {
+    text-decoration: none;
+    background-color: rgb(232, 232, 232);
+    padding: 1em;
+
+    border: solid 1px black;
+    border-radius: 3px;
+
+    color: black;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    
+}
+
+.par {
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+    
+}
+
+.inputFile {
+    text-align: center;
+    padding: 0;
+    display: block;
+    font-family: "Roboto Slab", sans-serif;
+    margin: 0;
+    width: 190px;
+}
+
+.formContainer > input {
+    margin: 30px 0;
+}
+
+.sendForm {
+    font-family: "Roboto Slab", sans-serif;
+
+    background-color: rgb(232, 232, 232);
+    padding: 1em;
+
+    border: solid 1px black;
+    border-radius: 3px;
+
+    cursor: pointer;
 }
