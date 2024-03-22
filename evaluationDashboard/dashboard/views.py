@@ -11,25 +11,24 @@ import pandas as pd
 # Create your views here.
 
 def index(request):
-    filePath = "media/documents/merged_genefamilies_tables.tsv"
     data = []
-
-    df = pd.read_csv(filePath, nrows=30, sep="\t")
-
-    header = df.columns.tolist()
-    data = df.values.tolist()
-
-    h = 0
+    header = []
 
     if request.method == "POST":
         form = FileSelectForm(request.POST)
         if form.is_valid():
             h = form.cleaned_data['fileName']
 
+            filePath = "media/" + h 
+
+            df = pd.read_csv(filePath, nrows=30, sep="\t")
+
+            header = df.columns.tolist()
+            data = df.values.tolist()
+
             context = {"data":data,
                 "form":form,
-               "header":header,
-               "h":h}
+               "header":header,}
 
             return render(request,'dashboard/index.html', context)
         
@@ -37,7 +36,7 @@ def index(request):
     context = {"data":data,
                "header":header,
                "form":form,
-               "h":h}
+               }
 
     return render(request,'dashboard/index.html', context)
 

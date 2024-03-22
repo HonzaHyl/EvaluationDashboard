@@ -23,11 +23,12 @@
             
         <div class="fileSelect">
         
-        <form method="post" action="{% url 'dashboard:index' %}">
+        <form method="post" action="{% url 'dashboard:index' %}" class="select-form">
             {% csrf_token %}
         {{form.as_div}}
         <input type="submit" value="Submit">
         </form>
+
         <a href="{% url 'dashboard:load_file' %}" class="LoadFileButton">Load file</a>
         </div>
     </div>
@@ -35,12 +36,13 @@
     
     <div class="main">
         <div class="sidebar">
-            {{h}}
+        
         </div>
         
         <div class="verticalLine"></div>
         <div class="mainbar">
-
+        
+        {% if data %}
             <table>
                 <tr>
                     {% for name in header%}
@@ -55,6 +57,11 @@
                 </tr>
                 {% endfor %}
             </table>
+        {%else%}
+            <table>
+                <tr>File not found</tr>
+            </table>
+        {%endif%}
 
         </div>
         
