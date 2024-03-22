@@ -1,5 +1,7 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
-from .forms import UploadTableForm
+from .forms import UploadTableForm, FileSelectForm
+
+from .models import UploadTable
 
 from django.urls import reverse
 
@@ -12,10 +14,30 @@ def index(request):
     filePath = "media/documents/merged_genefamilies_tables.tsv"
     data = []
 
-    df = pd.read_csv(filePath, nrows=30, sep="\t", header=None)
+    df = pd.read_csv(filePath, nrows=30, sep="\t")
 
+    header = df.columns.tolist()
     data = df.values.tolist()
-    context = {"data":data}
+
+    h = 0
+
+    if request.method == "POST":
+        form = FileSelectForm(request.POST)
+        if form.is_valid():
+            h = form.cleaned_data['fileName']
+
+            context = {"data":data,
+                "form":form,
+               "header":header,
+               "h":h}
+
+            return render(request,'dashboard/index.html', context)
+        
+    form = FileSelectForm()
+    context = {"data":data,
+               "header":header,
+               "form":form,
+               "h":h}
 
     return render(request,'dashboard/index.html', context)
 
@@ -31,5 +53,10 @@ def load_file(request):
     return render(request,'dashboard/loadFile.html', context)
 
 def genefamilies(request):
-    return render(request, 'dashboard/genefamilies.html')
-        
+    
+    uploaded_files = UploadTable.objects.all()
+    
+
+    
+    return render(request, 'dashboard/genefamilies.html', {'uploaded_files': uploaded_files})
+

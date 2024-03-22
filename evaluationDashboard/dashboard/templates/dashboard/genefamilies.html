@@ -29,6 +29,13 @@
         
         <div class="verticalLine"></div>
         <div class="mainbar">
+           
+            <ul>
+                {% for uploaded_file in uploaded_files %}
+                    <li>{{ uploaded_file.file }}</li>
+                {% endfor %}
+            </ul>
+           
 
         </div>
     </div>
