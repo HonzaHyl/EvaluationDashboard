@@ -6,31 +6,51 @@
     <title>Evaluation Dashboard</title>
     {% load static %}
 
-    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+    <!--Load css stylesheet-->
+    <link rel="stylesheet" href="{% static '/dashboard/style.css' %}">
     
 </head>
 
 
 <body>
+    <!--Links to main parts of dashboard-->
     <div class="header">
         <div class="links">
-            <a href="">Overview</a>
-            <a href="">Graphs</a>
-            <a href="">Statistics</a>
+            <a href="{% url 'dashboard:index'%}">Overview</a>
+            <a href="{% url 'dashboard:graphs'%}">Graphs</a>
+            <a href="{% url 'dashboard:statistics'%}">Statistics</a>
         </div>  
-            <button class="loadFileButton">Upload file</button></li>
+
+
+            
+        <div class="fileSelect">
+        <!--Form for selecting loaded file-->
+        <form method="post" action="{% url 'dashboard:statistics' %}" class="select-form">
+            {% csrf_token %}
+        {{form.as_div}}
+        <input type="submit" value="Submit">
+        </form>
+
+        <!--Link to file uploading page-->
+        <a href="{% url 'dashboard:load_file' %}" class="LoadFileButton">Load file</a>
+        </div>
     </div>
 
-    <div>
+    <!--Main part of graphs page-->
+    <div class="main">
         <div class="sidebar">
+        
+        </div>
+        
+        <div class="verticalLine"></div>
 
-        </div>
-        <div class="verticaLine"></div>
         <div class="mainbar">
-            
+        
         </div>
+        
     </div>
     
+    <!--Load javascript file-->
     <script src="{% static 'dashboard/scripts.js' %}"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@ app_name = "dashboard"
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('genefamilies/', views.genefamilies, name='genefamilies'),
+    path('graphs/', views.graphs, name='graphs'),
+    path('statistics/', views.statistics, name="statistics"),
     path('load_file/', views.load_file, name='load_file'),
 ]

@@ -17,9 +17,9 @@ def index(request):
     if request.method == "POST":
         form = FileSelectForm(request.POST)
         if form.is_valid():
-            h = form.cleaned_data['fileName']
+            fileName = form.cleaned_data['fileName']
 
-            filePath = "media/" + h 
+            filePath = "media/" + fileName
 
             df = pd.read_csv(filePath, nrows=30, sep="\t")
 
@@ -51,11 +51,40 @@ def load_file(request):
         context = {'form':form,}
     return render(request,'dashboard/loadFile.html', context)
 
-def genefamilies(request):
-    
-    uploaded_files = UploadTable.objects.all()
-    
+def graphs(request):
+    if request.method == "POST":
+        form = FileSelectForm(request.POST)
+        if form.is_valid():
+            fileName = form.cleaned_data['fileName']
 
-    
-    return render(request, 'dashboard/genefamilies.html', {'uploaded_files': uploaded_files})
+            context = {
+                "form":form,
+                }
+
+            return render(request,'dashboard/graphs.html', context)
+            
+    form = FileSelectForm()
+    context = {
+         "form":form,
+        }
+    return render(request, 'dashboard/graphs.html', context)
+
+def statistics(request):
+      
+    if request.method == "POST":
+        form = FileSelectForm(request.POST)
+        if form.is_valid():
+            fileName = form.cleaned_data['fileName']
+
+            context = {
+                "form":form,
+                }
+
+            return render(request,'dashboard/statistics.html', context)
+            
+    form = FileSelectForm()
+    context = {
+         "form":form,
+        }
+    return render(request, 'dashboard/statistics.html', context)
 

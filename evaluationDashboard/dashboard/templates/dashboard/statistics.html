@@ -25,7 +25,7 @@
             
         <div class="fileSelect">
         <!--Form for selecting loaded file-->
-        <form method="post" action="{% url 'dashboard:index' %}" class="select-form">
+        <form method="post" action="{% url 'dashboard:graphs' %}" class="select-form">
             {% csrf_token %}
         {{form.as_div}}
         <input type="submit" value="Submit">
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <!--Main part of overview page-->
+    <!--Main part of statistics page-->
     <div class="main">
         <div class="sidebar">
         
@@ -44,30 +44,8 @@
         
         <div class="verticalLine"></div>
 
-        <!--Place for table to load-->
         <div class="mainbar">
         
-        {% if data %}
-            <table>
-                <tr>
-                    {% for name in header%}
-                    <th>{{ name }}</th>
-                    {% endfor %}
-                </tr>
-                {% for row in data %}
-                <tr>
-                    {% for column in row %}
-                    <td>{{ column }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </table>
-        {%else%}
-            <table>
-                <tr>File not found</tr>
-            </table>
-        {%endif%}
-
         </div>
         
     </div>
