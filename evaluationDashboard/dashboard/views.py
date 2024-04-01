@@ -88,41 +88,15 @@ class select_file(View):
             request.session['selectedFile'] = filePath
             return HttpResponseRedirect(reverse('dashboard:index')) 
 
-def graphs(request):
-    if request.method == "POST":
-        form = FileSelectForm(request.POST)
-        if form.is_valid():
-            fileName = form.cleaned_data['fileName']
+class graphs(View):
+    
+    def get(self, request):
 
-            context = {
-                "form":form,
-                }
-
-            return render(request,'dashboard/graphs.html', context)
-            
-    form = FileSelectForm()
-    context = {
-         "form":form,
-        }
-    return render(request, 'dashboard/graphs.html', context)
+        return render(request, 'dashboard/graphs.html')
 
 
-def statistics(request):
-      
-    if request.method == "POST":
-        form = FileSelectForm(request.POST)
-        if form.is_valid():
-            fileName = form.cleaned_data['fileName']
-
-            context = {
-                "form":form,
-                }
-
-            return render(request,'dashboard/statistics.html', context)
-            
-    form = FileSelectForm()
-    context = {
-         "form":form,
-        }
-    return render(request, 'dashboard/statistics.html', context)
+class statistics(View):
+    def get(self, request):
+        
+        return render(request, 'dashboard/statistics.html')
 

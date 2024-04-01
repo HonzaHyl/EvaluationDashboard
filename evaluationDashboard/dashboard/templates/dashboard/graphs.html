@@ -24,12 +24,8 @@
 
             
         <div class="fileSelect">
-        <!--Form for selecting loaded file-->
-        <form method="post" action="{% url 'dashboard:statistics' %}" class="select-form">
-            {% csrf_token %}
-        {{form.as_div}}
-        <input type="submit" value="Submit">
-        </form>
+        <!--Link to selecting loaded file-->
+        <a href="{% url 'dashboard:select_file' %}" class="LoadFileButton">Select File</a>
 
         <!--Link to file uploading page-->
         <a href="{% url 'dashboard:load_file' %}" class="LoadFileButton">Load file</a>
