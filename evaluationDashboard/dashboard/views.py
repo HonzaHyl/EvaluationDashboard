@@ -1,55 +1,92 @@
+# Import url and rendering stuff
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.views import View
+
+# Import forms
 from .forms import UploadTableForm, FileSelectForm
 
-from .models import UploadTable
-
-from django.urls import reverse
-
+# Import data processing stuff
 import pandas as pd
 
+# Import pagination
+from django.core.paginator import Paginator
 
-# Create your views here.
 
-def index(request):
-    data = []
-    header = []
+# Main page view
 
-    if request.method == "POST":
-        form = FileSelectForm(request.POST)
-        if form.is_valid():
-            fileName = form.cleaned_data['fileName']
+class index(View):
+    template = 'dashboard/index.html'
+    formClass = FileSelectForm
 
-            filePath = "media/" + fileName
 
-            df = pd.read_csv(filePath, nrows=30, sep="\t")
+    def get(self, request):
+            
+            if ('selectedFile' in request.session):
+                filePath = request.session['selectedFile']
 
-            header = df.columns.tolist()
-            data = df.values.tolist()
+                # Read header of the tsv
+                header = pd.read_csv(filePath, nrows=0, sep="\t")
 
-            context = {"data":data,
-                "form":form,
+                # Read the rest of available data
+                df = pd.read_csv(filePath, sep="\t",)
+
+                # Extract header data to list
+                header = header.columns.tolist()
+
+                # Extract the rest of the data to list 
+                data = df.to_numpy().tolist()
+
+                # Set up pagination
+                p = Paginator(data, 30)
+                page = request.GET.get("page")
+
+                selectedData = p.get_page(page)               
+                
+                context = {"selectedData":selectedData,
+                "form":self.formClass,
                "header":header,}
+                
+                return render(request, self.template, context)
 
-            return render(request,'dashboard/index.html', context)
-        
-    form = FileSelectForm()
-    context = {"data":data,
-               "header":header,
-               "form":form,
-               }
+            else:
+                context = {'selectedData':'',
+                    'header':'',
+                    'form':self.formClass,
+                  }
+                return render(request, self.template, context)
 
-    return render(request,'dashboard/index.html', context)
 
-def load_file(request):
-    if request.method == 'POST':
-        form = UploadTableForm(request.POST, request.FILES)
+class load_file(View):
+    formClass = UploadTableForm
+    template = "dashboard/loadFile.html"
+
+    def get(self, request):
+        context = {"form":self.formClass}
+        return render(request, self.template, context)
+    
+    def post(self, request):
+        form = self.formClass(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('dashboard:index'))
-    else:        
-        form = UploadTableForm()
-        context = {'form':form,}
-    return render(request,'dashboard/loadFile.html', context)
+        
+
+class select_file(View):
+    formClass = FileSelectForm
+    template = 'dashboard/selectFile.html'
+
+    def get(self, request):
+        context = {"form":self.formClass}
+        return render(request, self.template, context)
+    
+    def post(self, request):
+        form = self.formClass(request.POST)
+        if form.is_valid():
+            fileName = form.cleaned_data['fileName']
+            filePath = 'media/' + fileName
+            request.session['selectedFile'] = filePath
+            return HttpResponseRedirect(reverse('dashboard:index')) 
 
 def graphs(request):
     if request.method == "POST":
@@ -68,6 +105,7 @@ def graphs(request):
          "form":form,
         }
     return render(request, 'dashboard/graphs.html', context)
+
 
 def statistics(request):
       

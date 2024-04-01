@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select file</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/dashboard/selectFile.css' %}">
+</head>
+
+<body>
+    <div class="formContainer">
+        <form method="post" action="{% url 'dashboard:select_file' %}" id="select-form">
+            {% csrf_token %}
+            {{form.as_div}}
+        <input type="submit" value="Select">
+        </form>
+        <a href="javascript:history.go(-1)">Back to main page</a>
+        </div>  
+    
+  
+</body>
+</html>
