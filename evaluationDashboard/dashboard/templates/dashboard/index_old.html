@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static '/dashboard/style.css' %}">
 
     <!-- Simples Datatables-->
+    
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
     
@@ -41,18 +42,54 @@
     <!--Main part of overview page-->
     <div class="main">
         <div class="sidebar">
-           
-            
+        {{selectedValue}}
         </div>
         
         <div class="verticalLine"></div>
 
         <!--Place for table to load-->
         <div class="mainbar">
-
-        <table id="myTable"></table>
         
-        
+        {% if selectedData %}
+            
+            <table>
+                <tr>
+                    {% for name in header%}
+                    <th>{{ name }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in selectedData %}
+                <tr>
+                    {% for column in row %}
+                    <td>{{ column }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            
+            <!--Pagination for the table-->
+            <div>
+                {% if selectedData.has_previous %}
+                    <a href="?page=1">&laquo;</a>
+                    <a href="?page={{selectedData.previous_page_number}}">Previous</a>
+    
+                {% endif %}
+    
+                Page {{selectedData.number}} of {{selectedData.paginator.num_pages}}
+    
+                {% if selectedData.has_next %}
+                    <a href="?page={{selectedData.next_page_number}}">Next</a>
+                    <a href="?page={{selectedData.paginator.num_pages}}">&raquo;</a>
+    
+                {%endif%}
+            </div>
+        {%else%}
+            
+            <table>
+                <tr>File not found</tr>
+            </table>
+            
+        {%endif%}
         </div>
         
 
@@ -61,46 +98,7 @@
         
     </div>
     <script>
-        const getData = function(){
-         return fetch("{% url 'dashboard:load_data' %}", {
-            headers:{
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-        })
-        .then(response => {
-            if(!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-             return response.json()
-        })
-        .then(data => {
-            const header = data["header"]
-            const values = data["values"]
-            console.log(data)
-	        return {"header": header, "values":values}
-        })
-        
-        }
-        const dfData = getData()
-
-        dfData.then(function(df) {
-            
-            console.log(df["values"])
-            const dataTable = new simpleDatatables.DataTable("#myTable", {
-                deferRender: true
-            })
-            const convertedData = simpleDatatables.convertJSON({
-            data: df["values"],
-            headings: true,
-            
-            })
-
-            const newData = df["values"]
-            dataTable.insert(newData)
-        })
-
-    
+        console.log('{{ header }}')
     </script>
     
     <!--Load javascript file-->

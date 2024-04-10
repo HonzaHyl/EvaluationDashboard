@@ -2,9 +2,14 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 # Import forms
-from .forms import UploadTableForm, FileSelectForm
+from .forms import UploadTableForm, FileSelectForm, UploadTSVForm
+
+# Import models
+from .models import UploadTSV
 
 # Import data processing stuff
 import pandas as pd
@@ -12,54 +17,60 @@ import pandas as pd
 # Import pagination
 from django.core.paginator import Paginator
 
+import json
+import csv
+
 
 # Main page view
 
 class index(View):
     template = 'dashboard/index.html'
-    formClass = FileSelectForm
+ 
 
 
     def get(self, request):
             
-            if ('selectedFile' in request.session):
-                filePath = request.session['selectedFile']
+                return render(request, self.template)
+            
 
-                # Read header of the tsv
-                header = pd.read_csv(filePath, nrows=0, sep="\t")
+class load_data(View):
+    
+    def get(self, request):
+        if ('selectedFile' in request.session):
+            filePath = request.session['selectedFile']
 
-                # Read the rest of available data
-                df = pd.read_csv(filePath, sep="\t",)
+            # Read header of the tsv
+            header = pd.read_csv(filePath, nrows=0, sep="\t")
 
-                # Extract header data to list
-                header = header.columns.tolist()
+            # Read the rest of available data
+            df = pd.read_csv(filePath, sep="\t", index_col=0, header=0)
 
-                # Extract the rest of the data to list 
-                data = df.to_numpy().tolist()
+            # Extract header data to list
+            header = header.columns.tolist()
 
-                # Set up pagination
-                p = Paginator(data, 30)
-                page = request.GET.get("page")
+            # Extract the rest of the data to list 
+            data = df.to_csv()
+            dict_data = []
 
-                selectedData = p.get_page(page)               
+            with open(filePath, "r") as table:
+                reader = csv.DictReader(table, delimiter="\t")
+                for row in reader:
+                    dict_data.append(row)
+                json_file = json.dumps(dict_data)
+
+            context = {"values":dict_data}
                 
-                context = {"selectedData":selectedData,
-                "form":self.formClass,
-               "header":header,}
-                
-                return render(request, self.template, context)
+            return JsonResponse(context)
+        else:
+            return JsonResponse({"header":"File not found"})
 
-            else:
-                context = {'selectedData':'',
-                    'header':'',
-                    'form':self.formClass,
-                  }
-                return render(request, self.template, context)
 
 
 class load_file(View):
-    formClass = UploadTableForm
+    #formClass = UploadTableForm
+    formClass = UploadTSVForm
     template = "dashboard/loadFile.html"
+    model = UploadTSV
 
     def get(self, request):
         context = {"form":self.formClass}
@@ -68,7 +79,10 @@ class load_file(View):
     def post(self, request):
         form = self.formClass(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            df = pd.read_csv(request.FILES['file'], sep="\t")
+            json_file = df.to_json(orient="records")
+            instance = UploadTSV(data=json_file)
+            instance.save()
             return HttpResponseRedirect(reverse('dashboard:index'))
         
 

@@ -7,6 +7,9 @@ class UploadTableForm(forms.ModelForm):
         model = UploadTable
         fields = ['file']
 
+class UploadTSVForm(forms.Form):
+    file = forms.FileField()
+
 def getFileNames():
     return {i.file: i.file for i in UploadTable.objects.all()}
 

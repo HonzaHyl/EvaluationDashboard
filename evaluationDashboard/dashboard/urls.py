@@ -1,6 +1,6 @@
 from django.urls import path
 
-from dashboard.views import load_file, index, select_file, statistics, graphs
+from dashboard.views import load_file, index, select_file, statistics, graphs, load_data
 
 # App name is used in templates to call specific view via url command
 # For example: href="{% url 'dashboard:index' ...%}"
@@ -11,5 +11,6 @@ urlpatterns = [
     path('graphs/', graphs.as_view(), name='graphs'),
     path('statistics/', statistics.as_view(), name="statistics"),
     path('load_file/', load_file.as_view(), name='load_file'),
-    path('select_file/', select_file.as_view(), name='select_file')
+    path('select_file/', select_file.as_view(), name='select_file'),
+    path('load_data/', load_data.as_view(), name='load_data'),
 ]
